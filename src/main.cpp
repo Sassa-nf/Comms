@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <Wire.h>
 #include <comms.h>
 #include <config.h>
 #include <freertos/FreeRTOS.h>
@@ -28,12 +29,16 @@ void dumpToComms(void);
 
 void setup()
 {
+  Serial.begin(115200);
+
   cfg = Config::init();
   Comms::initComms(cfg);
   scan_result.last_epoch = 0;
   scan_result.readings_sz = 0;
 
   xTaskCreate(dumpToCommsTask, "DUMP_RESPONSE_PROCESS", 2048, NULL, 1, &logToSerial);
+
+  Serial.println("setup complete");
 }
 
 void loop()
@@ -41,6 +46,7 @@ void loop()
   checkComms();
   delay(500);
 
+  Serial.println("Epoch: " + String(scan_result.last_epoch));
   pushEvents(256);
 }
 

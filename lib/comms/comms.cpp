@@ -80,10 +80,10 @@ bool Comms::initComms(Config &c)
         Comms0 = new ReadlineComms(Serial);
         t0 = millis() + 10000;
         //        Serial.println("Setting _onUsbEvent0");
-        Serial.onEvent(ARDUINO_HW_CDC_RX_EVENT, _onUsbEvent0);
-        Serial.begin();
-        // xTaskCreate(monitorSerialTask, "CHECK_SERIAL_PROCESS", 2048, NULL, 1,
-        //             &monitorSerial);
+        // Serial.onEvent(ARDUINO_HW_CDC_RX_EVENT, _onUsbEvent0);
+        // Serial.begin();
+        xTaskCreate(monitorSerialTask, "CHECK_SERIAL_PROCESS", 2048, NULL, 1,
+                    &monitorSerial);
 
         Serial.println("Initialized communications on Serial using readline protocol");
 
